@@ -1,7 +1,7 @@
 /* 
  * CS:APP Data Lab 
  * 
- * <Please put your name and userid here>
+ * <Omar Diaz odiaz5>
  * 
  * bits.c - Source file with your solutions to the Lab.
  *          This is the file you will hand in to your instructor.
@@ -173,8 +173,14 @@ NOTES:
  *   Max ops: 8
  *   Rating: 1
  */
+
+/* De Morgan: ~(x|y) is equal to (~x) & (~y) */
+
 int bitNor(int x, int y) {
-  return 2;
+  int nx = ~x;
+  int ny = ~y;
+  int res = nx & ny;
+  return res;
 }
 /* 
  * bitXor - x^y using only ~ and & 
@@ -184,7 +190,13 @@ int bitNor(int x, int y) {
  *   Rating: 1
  */
 int bitXor(int x, int y) {
-  return 2;
+/* return teh XOR of x and y (1 only if bits are different*/
+  int a = (~x) & y;
+  int b = x & (~y);
+  int na = ~a;
+  int nb = ~b;
+  int res = ~(na & nb);
+  return res;
 }
 /* 
  * TMax - return maximum two's complement integer 
@@ -193,7 +205,10 @@ int bitXor(int x, int y) {
  *   Rating: 1
  */
 int tmax(void) {
-  return 2;
+/* Return the largest positive two's complement integer */
+  int top = 1 << 31;
+  int res = ~top;
+  return res;
 }
 /* 
  * isNotEqual - return 0 if x == y, and 1 otherwise 
@@ -203,7 +218,10 @@ int tmax(void) {
  *   Rating: 2
  */
 int isNotEqual(int x, int y) {
-  return 2;
+/* Nonzero if x and y differ; !! forces result into 0 or 1 */
+  int diff = x ^ y;
+  int nz = !!diff;
+  return nz;
 }
 /* 
  * copyLSB - set all bits of result to least significant bit of x
@@ -213,7 +231,11 @@ int isNotEqual(int x, int y) {
  *   Rating: 2
  */
 int copyLSB(int x) {
-  return 2;
+/* replicate the least significant bit across all 32 bits */
+  int lsb = x & 1;
+  int all = ~lsb + 1;
+  int res = all;
+  return res;
 }
 /* 
  * rotateRight - Rotate x to the right by n
@@ -224,7 +246,14 @@ int copyLSB(int x) {
  *   Rating: 3 
  */
 int rotateRight(int x, int n) {
-  return 2;
+/* rotate by splitting into logical rigth part and left wrap part*/
+  int negn = ~n +1; /* -n */
+  int lsh = (32 + negn) & 31; /* 32 - n (mod 32) */
+  int lowMask = ~((~0) << lsh); /* low (32-n) ones */
+  int right = (x >> n) & lowMask; /* logical right shift */
+  int lwrap = x << ((~n + 33) & 31); /* wrap-around part */
+  int res = right | lwrap;
+  return res;
 }
 /* 
  * isNonNegative - return 1 if x >= 0, return 0 otherwise 
@@ -234,5 +263,8 @@ int rotateRight(int x, int n) {
  *   Rating: 3
  */
 int isNonNegative(int x) {
-  return 2;
+/* arithmetic right shift sign bit: 0 if >=0, -1 if <0 */
+  int sign = x >> 31;
+  int res = !sign;
+  return res;
 }
